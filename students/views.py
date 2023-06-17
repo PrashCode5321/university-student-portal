@@ -39,6 +39,7 @@ class setUp(LoginRequiredMixin, View):
         # setting up the attendance in Attendance model
         subs = StudentSubjects.objects.filter(studentID=self.student)
         for sub in subs:
+            att = []
             classes = Sessions.objects.filter(subject=sub)
             if classes:
                 att = [int(day.attendance) for day in classes]
@@ -214,7 +215,7 @@ class CertView(setUp, FormView):
         return render(self.request, "home.html", context)
 
 
-class HomePageView(setUp, ListView):
+class HomePageView(LoginRequiredMixin, ListView):
     model = Events
     template_name = "home.html"
 
@@ -450,6 +451,6 @@ class FinanceView(setUp, ListView):
     template_name = "finances.html"
     context_object_name = "finances"
 
-    def get_object(self, *args, **kwargs):
-        student = Semester.objects.get(student=self.student)
+    def get_queryset(self) -> QuerySet[Any]:
+        student = Semester.objects.filter(student=self.student)
         return student
