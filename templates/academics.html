@@ -1,0 +1,79 @@
+{% extends "_base.html" %}
+{% block navbar1 %}{% endblock navbar1 %}
+{% block navbar2 %} active text-warning {% endblock navbar2 %}
+{% block navbar3 %}{% endblock navbar3 %}
+{% block navbar4 %}{% endblock navbar4 %}
+{% block navbar5 %}{% endblock navbar5 %}
+
+{% block title %}Academic Details{% endblock title %}
+
+{% block content %}
+<div class="container-fluid vh-100 mt-5 p-3 text-center">
+    <div class="row">
+        <div class="col bg-light rounded p-3 m-2 bg-opacity-50 ">
+            <h1 class="fw-bold text-body-secondary">Academic Details</h1>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-4">
+            <ul class="list-group">
+                <a href="{% url 'enrolment' %}"
+                    class="list-group-item list-group-item-action {% block class6 %} active {% endblock class6 %}">Enrolment
+                    Details</a>
+                <a href="{% url 'course-details' %}"
+                    class="list-group-item list-group-item-action {% block class7 %}{% endblock class7 %}">Course
+                    Details</a>
+                <a href="{% url 'attendance' %}"
+                    class="list-group-item list-group-item-action {% block class8 %}{% endblock class8 %}">Attendance</a>
+                <a href="{% url 'gradesheet' %}"
+                    class="list-group-item list-group-item-action {% block class9 %}{% endblock class9 %}">Grade
+                    Sheet</a>
+                <a href="{% url 'internals' %}"
+                    class="list-group-item list-group-item-action {% block class10 %}{% endblock class10 %}">Internal
+                    Marks</a>
+            </ul>
+        </div>
+        <div class="col-8 rounded bg-opacity-50">
+            <div class="row bg-dark-subtle rounded">
+                <h2>{% block acad_title %} Enrolment Details {% endblock acad_title %}</h2>
+            </div>
+            <div class="row my-3 bg-light rounded">
+                {% block acad_content %}
+                <table class="table table-hover overflow-y-auto">
+                    <tbody>
+                        <tr>
+                            <th scope="col">Student Name</th>
+                            <td scope="col">{{name}}</td>
+                            <th scope="row">Department</th>
+                            <td>{{department_name}}</td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Registration Number</th>
+                            <td>{{regiration_number}}</td>
+                            <th scope="row">Enrolment Number</th>
+                            <td>{{enrolment_number}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Year of Joining</th>
+                            <td>{{year_of_joining}}</td>
+                            <th scope="row">Year of Graduation</th>
+                            <td>{{year_of_graduation}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Current Year</th>
+                            <td>{{current_year}}</td>
+                            <th scope="row">Current Semester</th>
+                            <td>{{current_semester }}</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                {% endblock acad_content %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,40 @@
+{% extends 'admission_profile.html' %}
+
+{% block class3 %}{% endblock class3 %}
+{% block class4 %}{% endblock class4 %}
+{% block class5 %} active {% endblock class5 %}
+
+{% block subtitle %}Address{% endblock subtitle %}
+{% block body %}
+<table class="table table-hover overflow-y-auto">
+    <tbody>
+        <tr>
+            <th scope="col">Permanent Address Line 1</th>
+            <td scope="col">{{object.permanent_address1}}</td>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <th scope="row">Permanent Address Line 2</th>
+            <td>{{object.permanent_address2}}</td>
+        </tr>
+        <tr>
+            <th scope="row">City</th>
+            <td>{{object.city}}</td>
+        </tr>
+        <tr>
+            <th scope="row">State</th>
+            <td>{{object.state}}</td>
+        </tr>
+        <tr>
+            <th scope="row">Country</th>
+            <td>{{object.country}}</td>
+        </tr>
+        <tr>
+            <th scope="row">Pin Code</th>
+            <td>{{object.pin_code}}</td>
+        </tr>
+
+    </tbody>
+</table>
+{% endblock body %}

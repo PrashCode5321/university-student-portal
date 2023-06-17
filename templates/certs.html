@@ -1,0 +1,65 @@
+{% extends 'application.html' %}
+{% block class11 %}{% endblock class11 %}
+{% block class12 %}{% endblock class12 %}
+{% block class13 %}{% endblock class13 %}
+{% block class14 %}{% endblock class14 %}
+{% block class15 %} active {% endblock class15 %}
+
+{% block app_form %} Apply for Certificate {% endblock app_form%}
+
+{% block app_body %}
+<div class="input-group justify-content-center">
+    <form action="#" method="post" class="row my-3">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="row m-1">
+            <div class="col-4">
+                <label for="{{ field.id_for_label }}" class="col-form-label">{{ field.label }}</label>
+            </div>
+            <div class="col-8 col-md-4">
+                {{ field }}
+            </div>
+            <div class="col-0 col-md-4"></div>
+        </div>
+        {% endfor %}
+        <div class="col-6 offset-md-6">
+            <input type="submit" value="Submit" class="btn btn-outline-dark" id="submit_form" data-bs-toggle="modal"
+                data-bs-target="#exampleModal">
+        </div>
+
+
+    </form>
+</div>
+<script>
+    document.querySelector('#id_mobile').value = null;
+    document.querySelector('#id_email').value = '';
+    document.querySelector('#id_amount').value = 0;
+    function amountSet() {
+        var option = document.querySelector('#id_mode_of_delivery')
+        if (option.options[option.selectedIndex].text == 'Courier') {
+            document.querySelector('#id_amount').value = 100;
+        }
+        else {
+            document.querySelector('#id_amount').value = 0;
+        }
+    }
+    function mobileSet() {
+        if (document.querySelector('#id_mobile_check').checked) {
+            document.querySelector('#id_mobile').value = '{{ phone }}';
+        }
+        else {
+            document.querySelector('#id_mobile').value = null;
+        }
+    }
+
+    function emailSet() {
+        if (document.querySelector('#id_email_check').checked) {
+            document.querySelector('#id_email').value = '{{ email }}';
+        }
+        else {
+            document.querySelector('#id_email').value = '';
+        }
+    }
+
+</script>
+{% endblock app_body %}

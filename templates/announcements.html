@@ -1,0 +1,18 @@
+{% extends 'home.html' %}
+{% block class1 %}{% endblock class1 %}
+{% block class2 %} active {% endblock class2 %}
+
+{% block home_title %}
+Announcement
+{% endblock home_title %}
+
+{% block home_content %}
+{% for announcement in object_list %}
+<div class="card mb-1 border-secondary">
+    <div class="card-body">
+        <h5 class="card-title">{{ announcement.ann_title}}</h5>
+        <p class="card-text">{{ announcement.ann_info}}</p>
+    </div>
+</div>
+{% endfor %}
+{% endblock home_content %}

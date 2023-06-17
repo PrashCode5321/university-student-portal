@@ -1,0 +1,37 @@
+{% extends "_base.html" %}
+{% block navbar1 %}{% endblock navbar1 %}
+{% block navbar2 %}{% endblock navbar2 %}
+{% block navbar3 %} active text-warning {% endblock navbar3 %}
+{% block navbar4 %}{% endblock navbar4 %}
+{% block navbar5 %}{% endblock navbar5 %}
+
+{% block title %}Financials{% endblock title %}
+{% block content %}
+<div class="container-fluid vh-100 mt-5 p-3 text-center">
+    <div class="row">
+        <div class="col bg-light rounded p-3 m-2 bg-opacity-50 ">
+            <h1 class="fw-bold text-body-secondary">Financials</h1>
+        </div>
+    </div>
+    <div class="row bg-white col-10 mx-auto">
+        <table class="table table-hover overflow-y-auto">
+            <thead>
+                <tr>
+                    <th scope="col">Semester</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for money in finances %}
+                <tr>
+                    <td>{{ money.semester_number }}</td>
+                    <td>&#8377; {{ money.fees }}</td>
+                    <td>{% if money.fees_paid %} Paid {% else %} Due {% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

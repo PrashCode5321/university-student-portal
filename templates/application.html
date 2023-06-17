@@ -1,0 +1,106 @@
+{% extends "_base.html" %}
+{% block navbar1 %}{% endblock navbar1 %}
+{% block navbar2 %}{% endblock navbar2 %}
+{% block navbar3 %}{% endblock navbar3 %}
+{% block navbar4 %} active text-warning {% endblock navbar4 %}
+{% block navbar5 %}{% endblock navbar5 %}
+{% block title %}Applications{% endblock title %}
+{% block content %}
+
+
+<div class="container-fluid vh-100 mt-5 p-3 text-center">
+    <div class="row">
+        <div class="col bg-light rounded p-3 m-2 bg-opacity-50 ">
+            <h1 class="fw-bold text-body-secondary">Applications</h1>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-12 col-sm-4 mb-2">
+            <ul class="list-group">
+                <a href="{% url 'application' %}"
+                    class="list-group-item list-group-item-action {% block class11 %} active {% endblock class11 %}">Branch
+                    Change</a>
+                <a href="{% url 'redo_sub' %}"
+                    class="list-group-item list-group-item-action {% block class12 %}{% endblock class12 %}">Re-Registration</a>
+                <a href="{% url 'pay_fees' %}"
+                    class="list-group-item list-group-item-action {% block class13 %}{% endblock class13 %}">Semester
+                    Fee Payment</a>
+                <a href="{% url 'redo_exam' %}"
+                    class="list-group-item list-group-item-action {% block class14 %}{% endblock class14 %}">Re-Examination</a>
+                <a href="{% url 'certs' %}"
+                    class="list-group-item list-group-item-action {% block class15 %}{% endblock class15 %}">Certificates</a>
+            </ul>
+        </div>
+        <div class="col-12 col-md-8 rounded bg-opacity-50">
+            <div class="row bg-dark-subtle rounded">
+                <h2>{% block app_form %} Branch Change Form {% endblock app_form%}</h2>
+            </div>
+            <div class="row my-3 bg-light rounded">
+                {% block app_body %}
+                {% if not_valid %}
+                <div class="p-5">
+                    <span class="text-danger fw-bold">
+                        You are not eligible to apply for branch change. <br>
+                        You should have changed your branch in II semester.
+                    </span>
+                </div>
+                {% elif duplicate %}
+                <div class="p-5">
+                    <span class="text-primary fw-bold">
+                        You have already applied for branch change. <br>
+                        You can check your application status <a href="{% url 'status'%}">here</a>.
+                    </span>
+                </div>
+                {% else %}
+                <div class="input-group justify-content-center">
+                    <form action="#" method="post" class="row my-3">
+                        {% csrf_token %}
+                        <div class="col-4">
+                            <label for="name" class="col-form-label">Branch Name:</label>
+                        </div>
+                        <div class="col-6">
+                            <select class="form-select" name="branch_name" id="name">
+                                <option value="none" selected hidden disabled>Select a branch</option>
+                                {% for dept in department %}
+                                <option value="{{ dept.department_name }}">{{ dept.department_name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                onclick="enableSubmit()">
+                            <label class="form-check-label" for="flexCheckDefault">Are you sure you want to
+                                apply?</label>
+                        </div>
+                        <div class="col-6 offset-md-6">
+                            <input type="submit" value="Submit" class="btn btn-outline-dark" id="submit_form"
+                                data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        </div>
+                    </form>
+                </div>
+                <script>
+                    var flag = 0;
+                    document.getElementById('flexCheckDefault').checked = false;
+                    document.getElementById('submit_form').disabled = true;
+                    function enableSubmit() {
+                        if (flag == 0) {
+                            flag = 1;
+                            document.getElementById('submit_form').disabled = false;
+                        }
+                        else {
+                            flag = 0;
+                            document.getElementById('submit_form').disabled = true;
+                        }
+                    }
+                </script>
+
+                {% endif %}
+                {% endblock app_body %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

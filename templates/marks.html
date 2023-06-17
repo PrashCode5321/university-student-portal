@@ -1,0 +1,68 @@
+{% extends 'academics.html' %}
+{% block class6 %}{% endblock class6 %}
+{% block class7 %}{% endblock class7 %}
+{% block class8 %}{% endblock class8 %}
+{% block class9 %}{% endblock class9 %}
+{% block class10 %} active {% endblock class10 %}
+
+
+{% block acad_title %} Internal Marks {% endblock acad_title %}
+
+{% block acad_content %}
+<div class="container text-center">
+    <form action="" method="get" class="row justify-content-center my-2">
+        {%csrf_token %}
+        <div class="col-1">
+            <label for="sem_list" class="col-form-label">Semester</label>
+        </div>
+        <div class="col-4">
+            <select name="semester" class="form-select" id="sem_list">
+                {% for sem in semesters %}
+                <option value="{{sem.semester_number}}">{{sem.semester_number}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-1">
+            <input type="submit" value="Submit" class="btn btn-outline-dark">
+        </div>
+    </form>
+</div>
+<script>
+    document.querySelector('#sem_list').value = {{ input }};
+</script>
+<div class="my-3">
+    {% if exams %}
+    {% for key, value in exams.items %}
+
+    <table class="table table-hover overflow-y-auto">
+        <thead class="table-dark">
+            <tr>
+                <td colspan="4" class="fw-bold">{{ key }}</td>
+            </tr>
+        </thead>
+        <thead class="table-light">
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Name</th>
+                <th scope="col">Maximum</th>
+                <th scope="col">Score</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for exams in value %}
+            <tr>
+                <td>{{ exams.date }}</td>
+                <td>{{ exams.name }}</td>
+                <td>{{ exams.max_score }}</td>
+                <td>{{ exams.score }}</td>
+            </tr>
+            {% endfor %}
+
+
+        </tbody>
+    </table>
+    {% endfor %}
+    {% endif %}
+
+</div>
+{% endblock acad_content %}

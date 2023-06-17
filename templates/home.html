@@ -1,0 +1,68 @@
+{% extends "_base.html" %}
+{% block title %}Home Page{% endblock title %}
+{% block content %}
+
+
+<div class="container-fluid vh-100 mt-5 p-3 text-center position-relative">
+    <div class="row">
+        <div class="col row-md bg-light rounded p-3 m-2 bg-opacity-50 ">
+            <h1 class="fw-bold text-body-secondary">Welcome to XYZ University SLCM</h1>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-12 col-sm-4">
+            <ul class="list-group">
+                <a href="{% url 'home' %}"
+                    class="list-group-item list-group-item-action {% block class1 %} active {% endblock class1 %}">Events</a>
+                <a href="{% url 'announcements' %}"
+                    class="list-group-item list-group-item-action {% block class2 %}{% endblock class2 %}">Announcement</a>
+                <a href="#" class="list-group-item list-group-item-action ">News</a>
+                <a href="#" class="list-group-item list-group-item-action ">E-Notifications</a>
+            </ul>
+        </div>
+        <div class="col-12 col-sm-8 rounded bg-opacity-50">
+            <div class="row mt-2 bg-dark-subtle rounded">
+                <h2>
+                    {% block home_title %}
+                    Events
+                    {% endblock home_title %}
+                </h2>
+            </div>
+            <div class="row my-2 mb-4 bg-transparent rounded">
+                {% block home_content %}
+                {% for event in object_list %}
+                <div class="card mb-2 border-secondary">
+                    <div class="card-body">
+                        <h5 class="card-title">Event Name : {{ event.event_name}}</h5>
+                        <p class="card-text">Event Details : {{ event.event_details}}</p>
+                        <p class="card-text">Event Time : {{ event.event_time}}</p>
+                        <p class="card-text">Event Venue : {{ event.event_venue}}</p>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endblock home_content %}
+
+            </div>
+        </div>
+
+    </div>
+    {% if toast %}
+    <div class="">
+        <div class="toast-container bottom-0 end-0 p-3">
+            <div class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="10">
+                <div class="toast-header">
+                    <strong class="me-auto">{{ toast.title }}</strong>
+                    <small>{{ toast.time }}</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    {{ toast.line_one }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,65 @@
+{% extends 'academics.html' %}
+{% block class6 %}{% endblock class6 %}
+{% block class7 %}{% endblock class7 %}
+{% block class8 %}{% endblock class8 %}
+{% block class9 %} active {% endblock class9 %}
+{% block class10 %}{% endblock class10 %}
+
+
+{% block acad_title %} Grade Sheet {% endblock acad_title %}
+
+{% block acad_content %}
+<div class="container text-center">
+    <form action="" method="get" class="row justify-content-center my-2">
+        {%csrf_token %}
+        <div class="col-1">
+            <label for="sem_list" class="col-form-label">Semester</label>
+        </div>
+        <div class="col-4">
+            <select name="semester" class="form-select" id="sem_list">
+                {% for sem in semesters %}
+                <option value="{{sem.semester_number}}">{{sem.semester_number}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-1">
+            <input type="submit" value="Submit" class="btn btn-outline-dark">
+        </div>
+    </form>
+</div>
+<script>
+    document.querySelector('#sem_list').value = '{{ input }}';
+</script>
+{% if not nonee %}
+<div class="container">
+    {% if gpa %}GPA = {{gpa}}{% endif %} <br> CGPA = {{cgpa}}
+</div>
+<div class="mt-3">
+    {% if grades %}
+    <table class="table table-hover overflow-y-auto">
+        <thead>
+            <tr>
+                <th scope="col">Department</th>
+                <th scope="col">Subject ID</th>
+                <th scope="col">Subject Name</th>
+                <th scope="col">Credits</th>
+                <th scope="col">Grade Point</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for sub in grades %}
+            <tr>
+                <td>{{ sub.subjectID.department_ID.department_name }}</td>
+                <td>{{ sub.subjectID.subjectID }}</td>
+                <td>{{ sub.subjectID.name }}</td>
+                <td>{{ sub.subjectID.credits }}</td>
+                <td>{% if sub.grade_point != None %}{{ sub.grade_point }}{% else %}0{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+</div>
+{% endif %}
+{% endblock acad_content %}

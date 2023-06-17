@@ -1,0 +1,69 @@
+{% extends 'application.html' %}
+{% block class11 %}{% endblock class11 %}
+{% block class12 %} active {% endblock class12 %}
+{% block class13 %}{% endblock class13 %}
+{% block class14 %}{% endblock class14 %}
+{% block class15 %}{% endblock class15 %}
+
+{% block app_form %} Re-Registration of Subject {% endblock app_form%}
+
+{% block app_body %}
+{% if not_valid %}
+<div class="p-5">
+    <span class="text-success fw-bold">
+        This section is for <span class="text-danger fw-bold">FAILURES!</span><br>
+        You have not failed any subject for you to register for re-examination.
+    </span>
+</div>
+{% elif duplicate %}
+<div class="p-5">
+    <span class="text-primary fw-bold">
+        You have already registered for the back-logged subject{{ subjects|pluralize:'s'}}. <br>
+        You can check your application status <a href="{% url 'status'%}">here</a>.
+    </span>
+</div>
+{% else %}
+<div class="input-group justify-content-center">
+    <form action="#" method="post" class="row my-3">
+        {% csrf_token %}
+        <div class="col-4">
+            <label for="name" class="col-form-label">Subject Name{{ subjects|pluralize:'s'}}:</label>
+        </div>
+        <div class="col-4">
+            <select class="form-select" name="redo_sub" id="name" multiple>
+                <option value="none" selected hidden disabled>Select</option>
+                {% for sub_name in subjects %}
+                <option value="{{ sub_name }}">{{ sub_name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-12 mt-2">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onclick="enableSubmit()">
+            <label class="form-check-label" for="flexCheckDefault">Are you sure you want to
+                apply?</label>
+        </div>
+        <div class="col-6 offset-md-6">
+            <input type="submit" value="Submit" class="btn btn-outline-dark" id="submit_form" data-bs-toggle="modal"
+                data-bs-target="#exampleModal">
+        </div>
+    </form>
+</div>
+<script>
+    var flag = 0;
+    document.getElementById('flexCheckDefault').checked = false;
+    document.getElementById('submit_form').disabled = true;
+    function enableSubmit() {
+        if (flag == 0) {
+            flag = 1;
+            document.getElementById('submit_form').disabled = false;
+        }
+        else {
+            flag = 0;
+            document.getElementById('submit_form').disabled = true;
+        }
+    }
+</script>
+
+{% endif %}
+{% endblock app_body %}

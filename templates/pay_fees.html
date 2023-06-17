@@ -1,0 +1,41 @@
+{% extends 'application.html' %}
+{% block class11 %}{% endblock class11 %}
+{% block class12 %}{% endblock class12 %}
+{% block class13 %} active {% endblock class13 %}
+{% block class14 %}{% endblock class14 %}
+{% block class15 %}{% endblock class15 %}
+{% block app_form %} Semester Fee Payment {% endblock app_form%}
+{% block app_body %}
+{% if not_valid %}
+<div class="p-5">
+    <span class="text-success fw-bold">
+        You have no unpaid fees. <br>
+        Keep up.
+    </span>
+</div>
+{% else %}
+<div class="input-group justify-content-center">
+    <div class="row">
+        <h3>You have to pay fees for semster {{ sem }}.</h3>
+        <div class="col-sm-6 mb-3 mb-sm-2">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Pay through Bank Gateway</h5>
+                    <p class="card-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Perferendis</p>
+                    <a href="#" class="btn btn-primary">Proceed</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Pay through Atom</h5>
+                    <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt, </p>
+                    <a href="#" class="btn btn-primary">Proceed</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock app_body %}

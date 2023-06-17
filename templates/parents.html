@@ -1,0 +1,39 @@
+{% extends 'admission_profile.html' %}
+{% block class3 %}{% endblock class3 %}
+{% block class4 %} active {% endblock class4 %}
+{% block class5 %}{% endblock class5 %}
+{% block subtitle %}Parents Details{% endblock subtitle %}
+
+{% block body %}
+<table class="table table-hover overflow-y-auto">
+    <tbody>
+        <tr>
+            <th scope="col">Father Name</th>
+            <td scope="col">{{object.father_name}}</td>
+            <th scope="row">Mother Name</th>
+            <td>{{object.mother_name}}</td>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <th scope="row">Father E-Mail</th>
+            <td>{{object.father_email}}</td>
+            <th scope="row">Mother E-Mail</th>
+            <td>{{object.mother_email}}</td>
+        </tr>
+        <tr>
+            <th scope="row">Father Contact Number</th>
+            <td>{{object.father_contact_no}}</td>
+            <th scope="row">Mother Contact Number</th>
+            <td>{{object.mother_contact_no}}</td>
+        </tr>
+        <tr>
+            <th scope="row">Father Occupation</th>
+            <td>{{object.father_occupation}}</td>
+            <th scope="row">Mother Occupation</th>
+            <td>{{object.mother_occupation}}</td>
+        </tr>
+
+    </tbody>
+</table>
+{% endblock body %}
