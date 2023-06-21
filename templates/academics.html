@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="row m-2">
-        <div class="col-4">
+        <div class="col-12 col-sm-4">
             <ul class="list-group">
                 <a href="{% url 'enrolment' %}"
                     class="list-group-item list-group-item-action {% block class6 %} active {% endblock class6 %}">Enrolment
@@ -33,43 +33,58 @@
                     Marks</a>
             </ul>
         </div>
-        <div class="col-8 rounded bg-opacity-50">
+        <div class="col-12 col-sm-8 mt-3 my-sm-0 rounded bg-opacity-50">
             <div class="row bg-dark-subtle rounded">
                 <h2>{% block acad_title %} Enrolment Details {% endblock acad_title %}</h2>
             </div>
             <div class="row my-3 bg-light rounded">
                 {% block acad_content %}
-                <table class="table table-hover overflow-y-auto">
-                    <tbody>
-                        <tr>
-                            <th scope="col">Student Name</th>
-                            <td scope="col">{{name}}</td>
-                            <th scope="row">Department</th>
-                            <td>{{department_name}}</td>
-                        </tr>
-                    </tbody>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Registration Number</th>
-                            <td>{{regiration_number}}</td>
-                            <th scope="row">Enrolment Number</th>
-                            <td>{{enrolment_number}}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Year of Joining</th>
-                            <td>{{year_of_joining}}</td>
-                            <th scope="row">Year of Graduation</th>
-                            <td>{{year_of_graduation}}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Current Year</th>
-                            <td>{{current_year}}</td>
-                            <th scope="row">Current Semester</th>
-                            <td>{{current_semester }}</td>
-                        </tr>
+                <div class="row p-2"></div>
+                <div class="col-12 col-md-6 row-gap-2">
+                    <div class="row">
+                        <div class="col-6 fw-bold">Student Name</div>
+                        <div class="col-6">{{name}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">Registration Number</div>
+                        <div class="col-6">{{regiration_number}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">Year of Joining</div>
+                        <div class="col-6">{{year_of_joining}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">Current Year</div>
+                        <div class="col-6">{{current_year}}</div>
+                    </div>
+                    <hr>
+                </div>
+                <div class="col-12 col-md-6 row-gap-2">
+                    <div class="row">
+                        <div class="col-6 fw-bold">Department</div>
+                        <div class="col-6">{{department_name}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">Enrolment Number</div>
+                        <div class="col-6">{{enrolment_number}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">Year of Graduation</div>
+                        <div class="col-6">{{year_of_graduation}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">Current Semester</div>
+                        <div class="col-6">{{current_semester }}</div>
+                    </div>
+                    <hr>
 
-                    </tbody>
-                </table>
+                </div>
                 {% endblock acad_content %}
             </div>
         </div>

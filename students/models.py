@@ -51,7 +51,6 @@ def path_and_rename(instance, filename):
     upload_to = "students"
     extension = filename.split(".")[-1]
     filename = f"{instance.registration_number}.{extension}"
-
     return os.path.join(upload_to, filename)
 
 

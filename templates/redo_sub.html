@@ -29,7 +29,7 @@
         <div class="col-4">
             <label for="name" class="col-form-label">Subject Name{{ subjects|pluralize:'s'}}:</label>
         </div>
-        <div class="col-4">
+        <div class="col-8 col-md-4 overflow-x-scroll">
             <select class="form-select" name="redo_sub" id="name" multiple>
                 <option value="none" selected hidden disabled>Select</option>
                 {% for sub_name in subjects %}
@@ -43,7 +43,7 @@
             <label class="form-check-label" for="flexCheckDefault">Are you sure you want to
                 apply?</label>
         </div>
-        <div class="col-6 offset-md-6">
+        <div class="col-6 offset-md-6 mt-2">
             <input type="submit" value="Submit" class="btn btn-outline-dark" id="submit_form" data-bs-toggle="modal"
                 data-bs-target="#exampleModal">
         </div>

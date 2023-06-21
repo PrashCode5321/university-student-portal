@@ -49,6 +49,282 @@ class setUp(LoginRequiredMixin, View):
         return super().setup(request, *args, **kwargs)
 
 
+class AddressView(setUp, DetailView):
+    template_name = "address.html"
+
+    def get_object(self, *args, **kwargs):
+        address = Address.objects.get(student_ID=self.student)
+        return address
+
+
+class AnnouncementPageView(setUp, ListView):
+    model = Announcement
+    template_name = "announcements.html"
+
+    def get_queryset(self) -> QuerySet[Any]:
+        return Announcement.objects.filter(dept_ref=self.student.department)
+
+
+class ApplicationPageView(setUp, View):
+    def get(self, request, *args, **kwargs):
+        context = {}
+        context["not_valid"] = False
+        context["duplicate"] = False
+
+        current_sem = Semester.objects.filter(student=self.student, semester_number=2)
+        duplicate = Applications.objects.filter(
+            student=self.student, name="Branch Change"
+        )
+        if current_sem.exists() and current_sem[0].category == "C":
+            if duplicate.exists():
+                context["duplicate"] = True
+            else:
+                context["department"] = Department.objects.exclude(
+                    department_name=self.student.department
+                )
+        else:
+            context["not_valid"] = True
+
+        return render(request, "application.html", context=context)
+
+    def post(self, request, *args, **kwargs):
+        data = request.POST["branch_name"]
+
+        application = {}
+
+        application["submitted_at"] = str(tz.now())  # not JSON serializable
+        application["current_branch_name"] = str(self.student.department)
+        application["requested_branch_name"] = data
+        json_app = json.dumps(application, indent=3)
+
+        app = Applications(
+            student=self.student,
+            date=tz.now(),
+            name="Branch Change",
+            status="R",
+            file=json_app,
+        )
+        app.save()
+        context = {}
+        toast = {
+            "title": "Your Application is submitted",
+            "line_one": "The status of your application can be viewed in the Application Status.",
+            "time": "0 mins ago",
+        }
+        context["object_list"] = Events.objects.all()
+        context["toast"] = toast
+
+        return render(request, "home.html", context)
+
+
+class ApplicationStatusView(setUp, ListView):
+    model = Applications
+    template_name = "status.html"
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["applications"] = Applications.objects.filter(student=self.student)
+        return context
+
+
+class AttendanceDetails(setUp, TemplateView):
+    template_name = "attendance.html"
+
+    def get_context_data(self, **kwargs: Any):
+        context = super().get_context_data(**kwargs)
+        context["semesters"] = self.sems
+
+        sem_input = self.request.GET.get("semester") or ""
+
+        if sem_input:
+            sem = Semester.objects.get(
+                Q(student=self.student), Q(semester_number=sem_input)
+            )
+            subs = StudentSubjects.objects.filter(semester_number=sem)
+            context["subjects"] = subs
+        context["input"] = sem_input
+        return context
+
+
+class CertView(setUp, FormView):
+    form_class = Certificate
+    template_name = "certs.html"
+    success_url = reverse_lazy("home")
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        # student = Student.objects.get(user=self.request.user)
+        context["phone"] = self.student.phone_number
+        context["email"] = self.student.email
+        return context
+
+    def form_valid(self, form: Any) -> HttpResponse:
+        student = Student.objects.get(user=self.request.user)
+        json_app = json.dumps(form.cleaned_data, indent=3)
+        app = Applications(
+            student=student,
+            date=tz.now(),
+            name="Application for Certificate",
+            status="R",
+            file=json_app,
+        )
+        app.save()
+        context = {}
+        toast = {
+            "title": "Your Application for Certificate is complete",
+            "line_one": "Stay posted for the updates regarding this application through Application Status.",
+            "time": "0 mins ago",
+        }
+        context["object_list"] = Events.objects.all()
+        context["toast"] = toast
+        # return super().form_valid(form)
+        return render(self.request, "home.html", context)
+
+
+class CourseDetails(setUp, TemplateView):
+    template_name = "course_detail.html"
+
+    def get_context_data(self, **kwargs: Any):
+        context = super().get_context_data(**kwargs)
+        context["semesters"] = self.sems
+
+        sem_input = self.request.GET.get("semester") or ""
+
+        if sem_input:
+            sem = Semester.objects.get(
+                Q(student=self.student), Q(semester_number=sem_input)
+            )
+            context["course"] = StudentSubjects.objects.filter(semester_number=sem)
+        context["input"] = sem_input
+        return context
+
+
+class EnrolmentDetails(setUp, TemplateView):
+    template_name = "academics.html"
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super(EnrolmentDetails, self).get_context_data(**kwargs)
+        context[
+            "name"
+        ] = f"{self.student.user.first_name} {self.student.user.last_name}"
+        context["regiration_number"] = self.student.registration_number
+        context["enrolment_number"] = self.student.enrolment_number
+        context["year_of_joining"] = self.student.year_of_joining
+        context["year_of_graduation"] = self.student.year_of_graduation
+        context["current_year"] = self.student.current_year
+        context["current_semester"] = self.current_sem.semester_number
+        context["department_name"] = self.student.department.department_name
+
+        return context
+
+
+class FeePaymentView(setUp, TemplateView):
+    template_name = "pay_fees.html"
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["not_valid"] = False
+        # student = Student.objects.get(user=self.request.user)
+        # semesters = Semester.objects.filter(student=student)
+        flag = 0
+        for fee in self.sems:
+            if not fee.fees_paid:
+                flag = 1
+        if flag:
+            context["not_valid"] = False
+            sem = Semester.objects.get(Q(student=self.student), Q(category="C"))
+            context["sem"] = sem.semester_number
+        else:
+            context["not_valid"] = True
+        return context
+
+
+class FinanceView(setUp, ListView):
+    model = Semester
+    template_name = "finances.html"
+    context_object_name = "finances"
+
+    def get_queryset(self) -> QuerySet[Any]:
+        student = Semester.objects.filter(student=self.student)
+        return student
+
+
+class GradesheetDetails(setUp, ListView):
+    model = StudentSubjects
+    template_name = "gradesheet.html"
+
+    def get_context_data(self, **kwargs: Any):
+        context = super().get_context_data(**kwargs)
+        # student = Student.objects.get(user=self.request.user)
+        # sems = Semester.objects.filter(student=student)
+        context["semesters"] = self.sems
+        context["nonee"] = False
+        sem_input = self.request.GET.get("semester") or ""
+        gpas = [sem.gpa for sem in self.sems]
+        credits = [sem.credits for sem in self.sems]
+        context["cgpa"] = round(np.average(gpas, weights=credits), 2)
+        if sem_input:
+            sem = Semester.objects.get(
+                Q(student=self.student), Q(semester_number=sem_input)
+            )
+            subs = StudentSubjects.objects.filter(semester_number=sem)
+            context["nonee"] = False
+            if subs:
+                context["grades"] = subs
+                context["gpa"] = sem.gpa
+            else:
+                context["nonee"] = True
+        context["input"] = sem_input
+        return context
+
+
+class HomePageView(LoginRequiredMixin, ListView):
+    model = Events
+    template_name = "home.html"
+
+
+class InternalDetails(setUp, TemplateView):
+    template_name = "marks.html"
+
+    def get_context_data(self, **kwargs: Any):
+        context = super().get_context_data(**kwargs)
+        # student = Student.objects.get(user=self.request.user)
+        # sems = Semester.objects.filter(student=self.student)
+        context["semesters"] = self.sems
+        sem_input = self.request.GET.get("semester") or ""
+
+        if sem_input:
+            sem = Semester.objects.get(
+                Q(student=self.student), Q(semester_number=sem_input)
+            )
+            subs = StudentSubjects.objects.filter(semester_number=sem)
+            # context["subjects"] = subs
+            exams = {}
+            for sub in subs:
+                name = f"{sub.subjectID.department_ID.department_name}{sub.subjectID.subjectID} {sub.subjectID.name}"
+                exams[name] = Exams.objects.filter(subject=sub).values()
+            context["exams"] = exams
+        context["input"] = sem_input
+        return context
+
+
+class ParentView(setUp, DetailView):
+    model = ParentDetails
+    template_name = "parents.html"
+
+    def get_object(self, *args, **kwargs):
+        parents = ParentDetails.objects.get(ward_ID=self.student)
+        return parents
+
+
+class ProfileView(setUp, DetailView):
+    model = Student
+    template_name = "admission_profile.html"
+
+    def get_object(self, *args, **kwargs):
+        return self.student
+
+
 class RedoExamView(setUp, View):
     def get(self, request, *args, **kwargs):
         context = {}
@@ -121,7 +397,11 @@ class RedoSubjectView(setUp, View):
         # failed subjects before the current semester
         current_subs = StudentSubjects.objects.exclude(semester_number=self.current_sem)
         failed_subs = [
-            sub.subjectID.name for sub in current_subs if sub.grade_point == 0
+            sub.subjectID.name
+            for sub in current_subs
+            if (sub.grade_point == 0)
+            or (sub.agg_attendance < 75)
+            or (sub.agg_attendance == None)
         ]
         duplicate = Applications.objects.filter(
             student=self.student, name="Re-registration of Subject"
@@ -178,279 +458,3 @@ class RedoSubjectView(setUp, View):
         context["toast"] = toast
 
         return render(request, "home.html", context)
-
-
-class CertView(setUp, FormView):
-    form_class = Certificate
-    template_name = "certs.html"
-    success_url = reverse_lazy("home")
-
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        # student = Student.objects.get(user=self.request.user)
-        context["phone"] = self.student.phone_number
-        context["email"] = self.student.email
-        return context
-
-    def form_valid(self, form: Any) -> HttpResponse:
-        student = Student.objects.get(user=self.request.user)
-        json_app = json.dumps(form.cleaned_data, indent=3)
-        app = Applications(
-            student=student,
-            date=tz.now(),
-            name="Application for Certificate",
-            status="R",
-            file=json_app,
-        )
-        app.save()
-        context = {}
-        toast = {
-            "title": "Your Application for Certificate is complete",
-            "line_one": "Stay posted for the updates regarding this application through Application Status.",
-            "time": "0 mins ago",
-        }
-        context["object_list"] = Events.objects.all()
-        context["toast"] = toast
-        # return super().form_valid(form)
-        return render(self.request, "home.html", context)
-
-
-class HomePageView(LoginRequiredMixin, ListView):
-    model = Events
-    template_name = "home.html"
-
-
-class ApplicationStatusView(setUp, ListView):
-    model = Applications
-    template_name = "status.html"
-
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context["applications"] = Applications.objects.filter(student=self.student)
-        return context
-
-
-class FeePaymentView(setUp, TemplateView):
-    template_name = "pay_fees.html"
-
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context["not_valid"] = False
-        # student = Student.objects.get(user=self.request.user)
-        # semesters = Semester.objects.filter(student=student)
-        flag = 0
-        for fee in self.sems:
-            if not fee.fees_paid:
-                flag = 1
-        if flag:
-            context["not_valid"] = False
-            sem = Semester.objects.get(Q(student=self.student), Q(category="C"))
-            context["sem"] = sem.semester_number
-        else:
-            context["not_valid"] = True
-        return context
-
-
-class ApplicationPageView(setUp, View):
-    def get(self, request, *args, **kwargs):
-        context = {}
-        context["not_valid"] = False
-        context["duplicate"] = False
-
-        current_sem = Semester.objects.filter(student=self.student, semester_number=2)
-        duplicate = Applications.objects.filter(
-            student=self.student, name="Branch Change"
-        )
-        if current_sem.exists() and current_sem[0].category == "C":
-            if duplicate.exists():
-                context["duplicate"] = True
-            else:
-                context["department"] = Department.objects.exclude(
-                    department_name=self.student.department
-                )
-        else:
-            context["not_valid"] = True
-
-        return render(request, "application.html", context=context)
-
-    def post(self, request, *args, **kwargs):
-        data = request.POST["branch_name"]
-
-        application = {}
-
-        application["submitted_at"] = str(tz.now())  # not JSON serializable
-        application["current_branch_name"] = str(self.student.department)
-        application["requested_branch_name"] = data
-        json_app = json.dumps(application, indent=3)
-
-        app = Applications(
-            student=self.student,
-            date=tz.now(),
-            name="Branch Change",
-            status="R",
-            file=json_app,
-        )
-        app.save()
-        context = {}
-        toast = {
-            "title": "Your Application is submitted",
-            "line_one": "The status of your application can be viewed in the Application Status.",
-            "time": "0 mins ago",
-        }
-        context["object_list"] = Events.objects.all()
-        context["toast"] = toast
-
-        return render(request, "home.html", context)
-
-
-class AnnouncementPageView(setUp, ListView):
-    model = Announcement
-    template_name = "announcements.html"
-
-    def get_queryset(self) -> QuerySet[Any]:
-        return Announcement.objects.filter(dept_ref=self.student.department)
-
-
-class EnrolmentDetails(setUp, TemplateView):
-    template_name = "academics.html"
-
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super(EnrolmentDetails, self).get_context_data(**kwargs)
-        context[
-            "name"
-        ] = f"{self.student.user.first_name} {self.student.user.last_name}"
-        context["regiration_number"] = self.student.registration_number
-        context["enrolment_number"] = self.student.enrolment_number
-        context["year_of_joining"] = self.student.year_of_joining
-        context["year_of_graduation"] = self.student.year_of_graduation
-        context["current_year"] = self.student.current_year
-        context["current_semester"] = self.current_sem.semester_number
-        context["department_name"] = self.student.department.department_name
-
-        return context
-
-
-class CourseDetails(setUp, TemplateView):
-    template_name = "course_detail.html"
-
-    def get_context_data(self, **kwargs: Any):
-        context = super().get_context_data(**kwargs)
-        context["semesters"] = self.sems
-
-        sem_input = self.request.GET.get("semester") or ""
-
-        if sem_input:
-            sem = Semester.objects.get(
-                Q(student=self.student), Q(semester_number=sem_input)
-            )
-            context["course"] = StudentSubjects.objects.filter(semester_number=sem)
-        context["input"] = sem_input
-        return context
-
-
-class GradesheetDetails(setUp, ListView):
-    model = StudentSubjects
-    template_name = "gradesheet.html"
-
-    def get_context_data(self, **kwargs: Any):
-        context = super().get_context_data(**kwargs)
-        # student = Student.objects.get(user=self.request.user)
-        # sems = Semester.objects.filter(student=student)
-        context["semesters"] = self.sems
-        context["nonee"] = False
-        sem_input = self.request.GET.get("semester") or ""
-        gpas = [sem.gpa for sem in self.sems]
-        credits = [sem.credits for sem in self.sems]
-        context["cgpa"] = round(np.average(gpas, weights=credits), 2)
-        if sem_input:
-            sem = Semester.objects.get(
-                Q(student=self.student), Q(semester_number=sem_input)
-            )
-            subs = StudentSubjects.objects.filter(semester_number=sem)
-            context["nonee"] = False
-            if subs:
-                context["grades"] = subs
-                context["gpa"] = sem.gpa
-            else:
-                context["nonee"] = True
-        context["input"] = sem_input
-        return context
-
-
-class AttendanceDetails(setUp, TemplateView):
-    template_name = "attendance.html"
-
-    def get_context_data(self, **kwargs: Any):
-        context = super().get_context_data(**kwargs)
-        context["semesters"] = self.sems
-
-        sem_input = self.request.GET.get("semester") or ""
-
-        if sem_input:
-            sem = Semester.objects.get(
-                Q(student=self.student), Q(semester_number=sem_input)
-            )
-            subs = StudentSubjects.objects.filter(semester_number=sem)
-            context["subjects"] = subs
-        context["input"] = sem_input
-        return context
-
-
-class InternalDetails(setUp, TemplateView):
-    template_name = "marks.html"
-
-    def get_context_data(self, **kwargs: Any):
-        context = super().get_context_data(**kwargs)
-        # student = Student.objects.get(user=self.request.user)
-        # sems = Semester.objects.filter(student=self.student)
-        context["semesters"] = self.sems
-        sem_input = self.request.GET.get("semester") or ""
-
-        if sem_input:
-            sem = Semester.objects.get(
-                Q(student=self.student), Q(semester_number=sem_input)
-            )
-            subs = StudentSubjects.objects.filter(semester_number=sem)
-            # context["subjects"] = subs
-            exams = {}
-            for sub in subs:
-                name = f"{sub.subjectID.department_ID.department_name}{sub.subjectID.subjectID} {sub.subjectID.name}"
-                exams[name] = Exams.objects.filter(subject=sub).values()
-            context["exams"] = exams
-        context["input"] = sem_input
-        return context
-
-
-class ProfileView(setUp, DetailView):
-    model = Student
-    template_name = "admission_profile.html"
-
-    def get_object(self, *args, **kwargs):
-        return self.student
-
-
-class ParentView(setUp, DetailView):
-    model = ParentDetails
-    template_name = "parents.html"
-
-    def get_object(self, *args, **kwargs):
-        parents = ParentDetails.objects.get(ward_ID=self.student)
-        return parents
-
-
-class AddressView(setUp, DetailView):
-    template_name = "address.html"
-
-    def get_object(self, *args, **kwargs):
-        address = Address.objects.get(student_ID=self.student)
-        return address
-
-
-class FinanceView(setUp, ListView):
-    model = Semester
-    template_name = "finances.html"
-    context_object_name = "finances"
-
-    def get_queryset(self) -> QuerySet[Any]:
-        student = Semester.objects.filter(student=self.student)
-        return student

@@ -5,35 +5,49 @@
 {% block subtitle %}Parents Details{% endblock subtitle %}
 
 {% block body %}
-<table class="table table-hover overflow-y-auto">
-    <tbody>
-        <tr>
-            <th scope="col">Father Name</th>
-            <td scope="col">{{object.father_name}}</td>
-            <th scope="row">Mother Name</th>
-            <td>{{object.mother_name}}</td>
-        </tr>
-    </tbody>
-    <tbody>
-        <tr>
-            <th scope="row">Father E-Mail</th>
-            <td>{{object.father_email}}</td>
-            <th scope="row">Mother E-Mail</th>
-            <td>{{object.mother_email}}</td>
-        </tr>
-        <tr>
-            <th scope="row">Father Contact Number</th>
-            <td>{{object.father_contact_no}}</td>
-            <th scope="row">Mother Contact Number</th>
-            <td>{{object.mother_contact_no}}</td>
-        </tr>
-        <tr>
-            <th scope="row">Father Occupation</th>
-            <td>{{object.father_occupation}}</td>
-            <th scope="row">Mother Occupation</th>
-            <td>{{object.mother_occupation}}</td>
-        </tr>
-
-    </tbody>
-</table>
+<div class="row p-2"></div>
+<div class="col-12 col-md-6 row-gap-2">
+    <div class="row">
+        <div class="col-6 fw-bold">Father Name</div>
+        <div class="col-6">{{object.father_name}}</div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-6 fw-bold">Father E-Mail</div>
+        <div class="col-6">{{object.father_email}}</div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-6 fw-bold">Father Contact Number</div>
+        <div class="col-6">{{object.father_contact_no}}</div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-6 fw-bold">Father Occupation</div>
+        <div class="col-6">{{object.father_occupation}}</div>
+    </div>
+    <hr>
+</div>
+<div class="col-12 col-md-6 row-gap-2">
+    <div class="row">
+        <div class="col-6 fw-bold">Mother Name</div>
+        <div class="col-6">{{object.mother_name}}</div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-6 fw-bold">Mother E-Mail</div>
+        <div class="col-6">{{object.mother_email}}</div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-6 fw-bold">Mother Contact Number</div>
+        <div class="col-6">{{object.mother_contact_no}}</div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-6 fw-bold">Mother Occupation</div>
+        <div class="col-6">{{object.mother_occupation}}</div>
+    </div>
+    <hr>
+</div>
 {% endblock body %}

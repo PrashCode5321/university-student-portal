@@ -12,7 +12,7 @@
 <div class="container text-center">
     <form action="" method="get" class="row justify-content-center my-2">
         {%csrf_token %}
-        <div class="col-1">
+        <div class="col-4 col-sm-1">
             <label for="sem_list" class="col-form-label">Semester</label>
         </div>
         <div class="col-4">
@@ -22,13 +22,13 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="col-1">
+        <div class="col-4 col-sm-1">
             <input type="submit" value="Submit" class="btn btn-outline-dark">
         </div>
     </form>
 </div>
 <script>
-    document.querySelector('#sem_list').value = {{ input }};
+    document.querySelector('#sem_list').value = '{{ input }}';
 </script>
 <div class="mt-3">
     {% if course %}

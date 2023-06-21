@@ -27,7 +27,7 @@
                     class="list-group-item list-group-item-action {% block class5 %}{% endblock class5 %}">Address</a>
             </ul>
         </div>
-        <div class="col-12 col-sm-8 mt-2 rounded bg-opacity-50">
+        <div class="col-12 col-sm-8 my-2 rounded bg-opacity-50">
             <div class="row bg-dark-subtle rounded">
                 <h2>
                     {% block subtitle %}
@@ -35,50 +35,73 @@
                     {% endblock subtitle %}
                 </h2>
             </div>
-            <div class="row my-2 bg-light rounded">
+            <div class="row mt-2 bg-light rounded">
                 {% block body %}
-                <table class="table table-hover overflow-hidden">
-                    <tbody>
-                        <tr>
-                            <th scope="col">First Name</th>
-                            <td scope="col">{{object.user.first_name}}</td>
-                            <th scope="row">Enrolment Number</th>
-                            <td>{{object.enrolment_number}}</td>
-                        </tr>
-                    </tbody>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Last Name</th>
-                            <td>{{object.user.last_name}}</td>
-                            <th scope="row">Registration Number</th>
-                            <td>{{object.registration_number}}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">E-Mail</th>
-                            <td>{{object.email}}</td>
-                            <th scope="row">Year of Joining</th>
-                            <td>{{object.year_of_joining}}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Contact Number</th>
-                            <td>{{object.phone_number}}</td>
-                            <th scope="row">Year of Graduation</th>
-                            <td>{{object.year_of_graduation}}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Sex</th>
-                            <td>{{object.sex}}</td>
-                            <th scope="row">Current Year</th>
-                            <td>{{object.current_year}}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Date of Birth</th>
-                            <td>{{object.date_of_birth}}</td>
-                            <th scope="row">Department</th>
-                            <td>{{object.department.department_name}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="row p-2"></div>
+                <div class="col-12 col-md-6 row-gap-2">
+                    <div class="row">
+                        <div class="col-6 fw-bold">First Name</div>
+                        <div class="col-6">{{object.user.first_name}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">Last Name</div>
+                        <div class="col-6">{{object.user.last_name}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">Enrolment Number</div>
+                        <div class="col-6">{{object.enrolment_number}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">Registration Number</div>
+                        <div class="col-6">{{object.registration_number}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">E-Mail</div>
+                        <div class="col-6">{{object.email}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">Year of Joining</div>
+                        <div class="col-6">{{object.year_of_joining}}</div>
+                    </div>
+                    <hr>
+                </div>
+                <div class="col-12 col-md-6 row-gap-2">
+                    <div class="row">
+                        <div class="col-6 fw-bold">Contact Number</div>
+                        <div class="col-6">{{object.phone_number}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">Year of Graduation</div>
+                        <div class="col-6">{{object.year_of_graduation}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">Sex</div>
+                        <div class="col-6">{{object.sex}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">Current Year</div>
+                        <div class="col-6">{{object.current_year}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">Date of Birth</div>
+                        <div class="col-6">{{object.date_of_birth}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6 fw-bold">Department</div>
+                        <div class="col-6">{{object.department.department_name}}</div>
+                    </div>
+                    <hr>
+                </div>
                 {% endblock body %}
             </div>
         </div>
