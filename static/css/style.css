@@ -14,12 +14,14 @@ html {
     -webkit-filter: blur(5px);*/
 
     /* Full height */
-    height: auto;
+
 
     /* Center and scale the image nicely */
     background-position: center;
-    background-repeat: repeat;
+    background-repeat: no-repeat;
     background-size: cover;
+    background-attachment: fixed;
+    height: 100%;
 
 }
 

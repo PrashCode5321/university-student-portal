@@ -17,128 +17,134 @@
         .bg-image {
             background-image: url("{% static 'images/college_bg.jpg' %}");
         }
+
+        body {
+            size: auto;
+        }
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg  bg-body-tertiary bg-dark fixed-top" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'home' %}">
-                <img src="{% static 'images/logo.png' %}" alt="logo" width="30" height="24"
-                    class="d-inline-block align-text-top"> XYZ University Portal
-            </a>
-            {% if user.is_authenticated %}
-            <button class=" navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link {% block navbar1 %}{% endblock navbar1 %}" aria-current="page"
-                            href="{% url 'profile' %}">Admission
-                            Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% block navbar2 %}{% endblock navbar2 %}" aria-current="page"
-                            href="{% url 'enrolment' %}">Academic Details</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% block navbar3 %}{% endblock navbar3 %}" aria-current="page"
-                            href="{% url 'finances' %}">Financials</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% block navbar4 %}{% endblock navbar4 %}" aria-current="page"
-                            href="{% url 'application' %}">Application</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% block navbar5 %}{% endblock navbar5 %}" aria-current="page"
-                            href="{% url 'status' %}">Application Status</a>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle " href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <span>More</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'admin:index' %}">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <div class="nav-item dropdown ms-auto">
-
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <span class="text-light">{{ user.first_name }}</span> <img class="rounded-circle" alt="avatar1"
-                            src="{% if user.student.image %}{{ user.student.image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}"
-                            width="30" height="30" />
+    <div class="bg-image" style="height: auto; width:100%; overflow: hidden;">
+        <div class="mask" style="background-color: rgba(0, 0, 0, 0.4); height: auto; width:100%">
+            <nav class="navbar navbar-expand-lg bg-dark fixed-top" data-bs-theme="dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="{% url 'home' %}">
+                        <img src="{% static 'images/logo.png' %}" alt="logo" width="30" height="24"
+                            class="d-inline-block align-text-top"> XYZ University Portal
                     </a>
+                    {% if user.is_authenticated %}
+                    <button class=" navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link {% block navbar1 %}{% endblock navbar1 %}" aria-current="page"
+                                    href="{% url 'profile' %}">Admission
+                                    Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% block navbar2 %}{% endblock navbar2 %}" aria-current="page"
+                                    href="{% url 'enrolment' %}">Academic Details</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% block navbar3 %}{% endblock navbar3 %}" aria-current="page"
+                                    href="{% url 'finances' %}">Financials</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% block navbar4 %}{% endblock navbar4 %}" aria-current="page"
+                                    href="{% url 'application' %}">Application</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% block navbar5 %}{% endblock navbar5 %}" aria-current="page"
+                                    href="{% url 'status' %}">Application Status</a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle " href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <span>More</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{% url 'admin:index' %}">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <div class="nav-item dropdown ms-auto">
+
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <span class="text-light">{{ user.first_name }}</span> <img class="rounded-circle"
+                                    alt="avatar1"
+                                    src="{% if user.student.image %}{{ user.student.image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}"
+                                    width="30" height="30" />
+                            </a>
 
 
 
-                    <ul class="dropdown-menu dropdown-menu-lg-end dropdown-menu-sm-start">
-                        <!-- <li><a class="dropdown-item" href="#">Upload Profile Picture</a></li> -->
-                        <li><a class="dropdown-item" href="#">Change Password</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
-                    </ul>
+                            <ul class="dropdown-menu dropdown-menu-lg-end dropdown-menu-sm-start">
+                                <!-- <li><a class="dropdown-item" href="#">Upload Profile Picture</a></li> -->
+                                <li><a class="dropdown-item" href="#">Change Password</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {% endif %}
+                </div>
+            </nav>
+            <div class="bg-image" style="height: auto; width:100%">
+                <div class="mask" style="background-color: rgba(0, 0, 0, 0.4); height: auto; width:100%">
+                    <div class="vh-auto" style="min-height: 635px;">
+
+                        {% block content %}
+
+                        {% endblock content %}
+                    </div>
                 </div>
             </div>
 
+
+            <!-- Footer -->
+            {% if user.is_authenticated %}
+            <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark" style="bottom: 0;">
+                <a class="navbar-brand mx-auto" href="#">
+                    <p class="lead fs-6">Copyright &copy; 2023 XYZ University</p>
+                    <a href="#" class="position-absolute bottom-0 end-0 p-3">
+                        <i class="bi bi-arrow-up-circle h1"></i>
+                    </a>
+                </a>
+            </nav>
+            {% else %}
+            <nav class="navbar navbar-expand-lg  bg-dark fixed-bottom" data-bs-theme="dark">
+                <a class="navbar-brand mx-auto" href="#">
+                    <p class="lead fs-6">Copyright &copy; 2023 XYZ University</p>
+                </a>
+            </nav>
             {% endif %}
-        </div>
-    </nav>
 
-    <div class="bg-image">
-        <div class="mask" style="background-color: rgba(0, 0, 0, 0.4);">
-
-            {% block content %}
-
-            {% endblock content %}
-
-        </div>
-    </div>
-
-
-    <!-- Footer -->
-    {% if user.is_authenticated %}
-    <nav class="navbar navbar-expand-lg  bg-dark" data-bs-theme="dark">
-        <a class="navbar-brand mx-auto" href="#">
-            <p class="lead fs-6">Copyright &copy; 2023 XYZ University</p>
-            <a href="#" class="position-absolute bottom-0 end-0 p-3">
-                <i class="bi bi-arrow-up-circle h1"></i>
-            </a>
-        </a>
-    </nav>
-    {% else %}
-    <nav class="navbar navbar-expand-lg  bg-dark fixed-bottom" data-bs-theme="dark">
-        <a class="navbar-brand mx-auto" href="#">
-            <p class="lead fs-6">Copyright &copy; 2023 XYZ University</p>
-        </a>
-    </nav>
-    {% endif %}
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
-        integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
-        crossorigin="anonymous"></script>
-    <script>
-        function changeText(this) {
-            this.style.color = '#ffc107';
-        }
-    </script>
-
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+                integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+                crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+                integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+                crossorigin="anonymous"></script>
+            <script>
+                function changeText(this) {
+                    this.style.color = '#ffc107';
+                }
+            </script>
 
 </body>
 

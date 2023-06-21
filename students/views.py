@@ -400,8 +400,8 @@ class RedoSubjectView(setUp, View):
             sub.subjectID.name
             for sub in current_subs
             if (sub.grade_point == 0)
-            or (sub.agg_attendance < 75)
             or (sub.agg_attendance == None)
+            or (sub.agg_attendance < 75)
         ]
         duplicate = Applications.objects.filter(
             student=self.student, name="Re-registration of Subject"

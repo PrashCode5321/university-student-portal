@@ -50,7 +50,11 @@ class Certificate(forms.Form):
 
     amount = forms.IntegerField(
         widget=forms.NumberInput(
-            attrs={"class": "form-control", "readonly": "readonly"}
+            attrs={
+                "class": "form-control",
+                "readonly": "readonly",
+                "disabled": "disabled",
+            }
         )
     )
 
